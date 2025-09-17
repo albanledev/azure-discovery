@@ -4,6 +4,20 @@ import uuid
 from datetime import datetime
 import azure.functions as func
 
+from opencensus.ext.azure.log_exporter import AzureLogHandler
+from opencensus.ext.azure.metrics_exporter import MetricsExporter
+import os
+
+# Instrumentation (au démarrage)
+logger = logging.getLogger(__name__)
+logger.addHandler(AzureLogHandler(
+    connection_string=os.getenv("APPLICATIONINSIGHTS_CONNECTION_STRING"))
+)
+
+metrics_exporter = MetricsExporter(
+    connection_string=os.getenv("APPLICATIONINSIGHTS_CONNECTION_STRING")
+)
+
 app = func.FunctionApp()
 
 @app.function_name(name="post_user")
@@ -101,6 +115,11 @@ def post_vote(req: func.HttpRequest, outputDocument: func.Out[func.Document]) ->
         }
 
         outputDocument.set(func.Document.from_dict(document))
+
+        logger.info("New vote", extra={"custom_dimensions": {
+        "choice": choice,
+        "email": email
+        }})
 
         return func.HttpResponse(
             json.dumps({"status": "saved", "vote": document}),

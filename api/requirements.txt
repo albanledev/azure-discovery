@@ -7,3 +7,4 @@ azure-functions
 #azure-functions-durable
 azure-cosmos
 pytest
+opencensus-ext-azure
