@@ -30,9 +30,6 @@ jobs:
           cd api
           pytest
 
-      - name: Setup Azure CLI
-        uses: azure/setup-azure-cli@v1
-
       - name: Setup Node.js (for Azure Functions Core Tools)
         uses: actions/setup-node@v3
         with:
@@ -49,6 +46,7 @@ jobs:
       - name: Deploy Azure Functions
         run: func azure functionapp publish bayrou-azure-functions --python
         working-directory: ./api
+
 
 
   frontend:
