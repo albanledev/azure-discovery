@@ -8,3 +8,4 @@ azure-functions
 azure-cosmos
 pytest
 opencensus-ext-azure
+json
